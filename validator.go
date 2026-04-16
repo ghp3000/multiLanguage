@@ -119,7 +119,7 @@ func (v *Validator) SetDefaultLocale(locale Locale) error {
 // Locales 取得当前已注册的翻译器列表
 func (v *Validator) Locales() []string {
 	var strs []string
-	for k, _ := range v.transMap {
+	for k := range v.transMap {
 		strs = append(strs, k)
 	}
 	return strs
