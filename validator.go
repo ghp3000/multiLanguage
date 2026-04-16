@@ -33,6 +33,14 @@ const (
 func SupportedLocales() []Locale {
 	return []Locale{LocaleEn, LocaleZh, LocaleZhTw}
 }
+func IsSupportedLocale(locale Locale) bool {
+	for _, v := range SupportedLocales() {
+		if locale == v {
+			return true
+		}
+	}
+	return false
+}
 
 type ValidatError struct {
 	Field string
@@ -102,14 +110,7 @@ func (v *Validator) Register(locale Locale, fieldFilename string) error {
 
 // SetDefaultLocale 设置默认语言,线程不安全,最佳时机是初始化阶段执行
 func (v *Validator) SetDefaultLocale(locale Locale) error {
-	var find bool = false
-	for _, v := range SupportedLocales() {
-		if v == locale {
-			find = true
-			break
-		}
-	}
-	if !find {
+	if !IsSupportedLocale(locale) {
 		return fmt.Errorf("%s not supported", locale)
 	}
 	v.defaultLang = string(locale)

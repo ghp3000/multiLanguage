@@ -28,14 +28,7 @@ func (m *MultiLanguage) Register(name, filename string, defaultLang bool) error 
 
 // SetDefaultLocale 设置默认语言,线程不安全,最佳时机是初始化阶段执行
 func (m *MultiLanguage) SetDefaultLocale(locale Locale) error {
-	var find bool = false
-	for _, v := range SupportedLocales() {
-		if v == locale {
-			find = true
-			break
-		}
-	}
-	if !find {
+	if !IsSupportedLocale(locale) {
 		return fmt.Errorf("%s not supported", locale)
 	}
 	m.defaultLang = string(locale)
