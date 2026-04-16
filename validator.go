@@ -2,6 +2,7 @@ package multiLanguage
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/ghp3000/multiLanguage/translations/tr_en"
 	"github.com/ghp3000/multiLanguage/translations/tr_zh"
@@ -96,6 +97,22 @@ func (v *Validator) Register(locale Locale, fieldFilename string) error {
 		return err
 	}
 	v.transMap[string(locale)] = trans
+	return nil
+}
+
+// SetDefaultLocale 设置默认语言,线程不安全,最佳时机是初始化阶段执行
+func (v *Validator) SetDefaultLocale(locale Locale) error {
+	var find bool = false
+	for _, v := range SupportedLocales() {
+		if v == locale {
+			find = true
+			break
+		}
+	}
+	if !find {
+		return fmt.Errorf("%s not supported", locale)
+	}
+	v.defaultLang = string(locale)
 	return nil
 }
 

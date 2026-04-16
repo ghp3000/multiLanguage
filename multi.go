@@ -2,6 +2,7 @@ package multiLanguage
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/ghp3000/multiLanguage/translator"
 )
@@ -24,6 +25,23 @@ func (m *MultiLanguage) Register(name, filename string, defaultLang bool) error 
 	}
 	return nil
 }
+
+// SetDefaultLocale 设置默认语言,线程不安全,最佳时机是初始化阶段执行
+func (m *MultiLanguage) SetDefaultLocale(locale Locale) error {
+	var find bool = false
+	for _, v := range SupportedLocales() {
+		if v == locale {
+			find = true
+			break
+		}
+	}
+	if !find {
+		return fmt.Errorf("%s not supported", locale)
+	}
+	m.defaultLang = string(locale)
+	return nil
+}
+
 func (m *MultiLanguage) Load(name string) error {
 	trans, ok := m.store[name]
 	if !ok {
